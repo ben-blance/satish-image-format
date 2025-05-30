@@ -18,13 +18,15 @@ class SatishDecoder:
         self.format = SatishFormat()
     
     def decode_to_image(self, satish_path: Union[str, os.PathLike], 
-                       output_path: Union[str, os.PathLike]) -> bool:
+                       output_path: Union[str, os.PathLike],
+                       output_format: Optional[str] = None) -> bool:
         """
         Convert SATISH file to standard image format
         
         Args:
             satish_path: Path to input .satish file
             output_path: Path for output image file
+            output_format: Output format (PNG, JPEG, BMP, etc.). If None, inferred from output_path extension
             
         Returns:
             bool: True if successful
@@ -44,8 +46,33 @@ class SatishDecoder:
             # Create PIL image
             pil_image = self._create_pil_image(satish_data)
             
+            # Determine output format
+            if output_format:
+                # Use specified format
+                save_format = output_format.upper()
+            else:
+                # Infer from file extension
+                _, ext = os.path.splitext(output_path)
+                if ext.lower() in ['.jpg', '.jpeg']:
+                    save_format = 'JPEG'
+                elif ext.lower() == '.png':
+                    save_format = 'PNG'
+                elif ext.lower() == '.bmp':
+                    save_format = 'BMP'
+                elif ext.lower() == '.gif':
+                    save_format = 'GIF'
+                elif ext.lower() == '.tiff':
+                    save_format = 'TIFF'
+                else:
+                    save_format = 'PNG'  # Default to PNG
+            
+            # Handle JPEG format (no alpha channel)
+            if save_format == 'JPEG' and pil_image.mode in ('RGBA', 'LA'):
+                # Convert to RGB for JPEG
+                pil_image = pil_image.convert('RGB')
+            
             # Save as standard image
-            pil_image.save(output_path)
+            pil_image.save(output_path, format=save_format)
             
             return True
             
@@ -155,6 +182,33 @@ class SatishDecoder:
         except Exception as e:
             raise FileError(f"Failed to read SATISH file info {satish_path}: {str(e)}") from e
     
+    def read_satish_file(self, satish_path: Union[str, os.PathLike]) -> Dict[str, Any]:
+        """
+        Read SATISH file and return metadata (for CLI info command)
+        
+        Args:
+            satish_path: Path to .satish file
+            
+        Returns:
+            dict: File metadata and image information
+        """
+        try:
+            satish_data = self._load_satish_file(satish_path)
+            header = satish_data['header']
+            
+            return {
+                'width': header.width,
+                'height': header.height,
+                'channels': header.channels,
+                'color_mode': self.format.SUPPORTED_CHANNELS.get(header.channels, 'Unknown'),
+                'version': header.version,
+                'quality': 95,  # Default quality, you might want to store this in the format
+                'metadata': {}  # Add metadata support if needed
+            }
+            
+        except Exception as e:
+            raise DecodingError(f"Failed to read SATISH file {satish_path}: {str(e)}") from e
+    
     def _validate_satish_file(self, satish_path: Union[str, os.PathLike]) -> bool:
         """Validate SATISH file exists and is readable"""
         try:
@@ -262,19 +316,21 @@ class SatishDecoder:
 
 
 def decode_image(satish_path: Union[str, os.PathLike], 
-                output_path: Union[str, os.PathLike]) -> bool:
+                output_path: Union[str, os.PathLike],
+                output_format: Optional[str] = None) -> bool:
     """
     Convenience function to decode a SATISH file to standard image format
     
     Args:
         satish_path: Path to input .satish file
         output_path: Path for output image file
+        output_format: Output format (PNG, JPEG, BMP, etc.). If None, inferred from output_path extension
         
     Returns:
         bool: True if successful
     """
     decoder = SatishDecoder()
-    return decoder.decode_to_image(satish_path, output_path)
+    return decoder.decode_to_image(satish_path, output_path, output_format)
 
 
 def get_image_info(satish_path: Union[str, os.PathLike]) -> Dict[str, Any]:

@@ -1,0 +1,121 @@
+Metadata-Version: 2.1
+Name: satish-format
+Version: 1.0.0
+Summary: SATISH Image Format - Modern, efficient image format with advanced compression
+Home-page: https://github.com/satish-format/satish-python
+Author: SATISH Format Team
+Author-email: contact@satishformat.dev
+Maintainer: SATISH Format Team
+Maintainer-email: contact@satishformat.dev
+License: MIT
+Project-URL: Bug Reports, https://github.com/satish-format/satish-python/issues
+Project-URL: Source, https://github.com/satish-format/satish-python
+Project-URL: Documentation, https://github.com/satish-format/satish-python/docs
+Project-URL: Changelog, https://github.com/satish-format/satish-python/blob/main/CHANGELOG.md
+Keywords: image,format,compression,satish,graphics,multimedia,conversion,metadata,cli,tool
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Information Technology
+Classifier: Topic :: Multimedia :: Graphics
+Classifier: Topic :: Multimedia :: Graphics :: Graphics Conversion
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Operating System :: OS Independent
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: MacOS
+Classifier: Environment :: Console
+Classifier: Environment :: Other Environment
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Provides-Extra: docs
+Provides-Extra: testing
+Provides-Extra: linting
+Provides-Extra: all
+
+# SATISH Image Format - Modular Project Structure
+
+satish-format/
+├── README.md
+├── setup.py
+├── requirements.txt
+├── satish/
+│   ├── **init**.py
+│   ├── core/
+│   │   ├── **init**.py
+│   │   ├── format.py          # Core format definition
+│   │   ├── encoder.py         # Image → SATISH conversion
+│   │   ├── decoder.py         # SATISH → Image conversion
+│   │   └── validator.py       # File validation
+│   ├── utils/
+│   │   ├── **init**.py
+│   │   ├── colors.py          # Color conversion utilities
+│   │   ├── file_utils.py      # File I/O helpers
+│   │   └── exceptions.py      # Custom exceptions
+│   └── cli/
+│       ├── **init**.py
+│       ├── commands.py        # CLI command handlers
+│       └── main.py           # CLI entry point
+├── tests/
+│   ├── **init**.py
+│   ├── test_core/
+│   │   ├── test_encoder.py
+│   │   ├── test_decoder.py
+│   │   └── test_format.py
+│   └── test_utils/
+│       ├── test_colors.py
+│       └── test_file_utils.py
+├── examples/
+│   ├── basic_usage.py
+│   ├── batch_convert.py
+│   └── custom_metadata.py
+└── docs/
+    ├── format_spec.md
+    ├── api_reference.md
+    └── examples.md
+
+## Key Benefits of This Structure:
+### 🔧 Core Module (satish/core/)
+- format.py: Defines the SATISH format specification
+- encoder.py: Handles image → .satish conversion
+- decoder.py: Handles .satish → image conversion
+- validator.py: Validates .satish files
+### 🛠️ Utils Module (satish/utils/)
+- colors.py: RGB ↔ Hex conversion, color utilities
+- file_utils.py: File I/O, path handling
+- exceptions.py: Custom error types
+### 💻 CLI Module (satish/cli/)
+- main.py: Command-line interface entry point
+- commands.py: Individual CLI commands
+### 🧪 Tests (tests/)
+- Unit tests for each module
+- Integration tests
+### 📚 Documentation (docs/)
+- Format specification
+- API documentation
+- Usage examples
+## Installation & Usage:
+bash
+# Development install
+pip install -e .
+# Use as CLI tool
+satish convert image.jpg output.satish
+satish view image.satish
+satish info image.satish
+# Use as Python library
+from satish import SatishEncoder, SatishDecoder
+encoder = SatishEncoder()
+encoder.save('input.jpg', 'output.satish')

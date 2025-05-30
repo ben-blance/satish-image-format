@@ -1,0 +1,3 @@
+[console_scripts]
+satish = satish.cli.main:cli_entry_point
+satish-convert = satish.cli.main:cli_entry_point

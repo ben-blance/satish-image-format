@@ -1,0 +1,24 @@
+# SATISH Image Format - Project Dependencies
+
+# Core image processing
+Pillow>=9.0.0
+
+# CLI interface and beautiful output
+rich>=13.0.0
+
+# File format handling
+numpy>=1.21.0
+
+# Optional: Progress bars and async operations
+tqdm>=4.64.0
+
+# Development dependencies (optional)
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=22.0.0
+flake8>=5.0.0
+mypy>=1.0.0
+
+# Documentation (optional)
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.0.0
